@@ -11,15 +11,16 @@ export CUDA_VISIBLE_DEVICES=$GPU_INDEX
 
 SCRIPT_DIR="$(pwd)/benchmarks/scripts/tf_cnn_benchmarks"
 
-CPU_NAME="$(lscpu | grep "Model name:" | sed -r 's/Model name:\s{1,}//g' | awk '{ print $4 }')";
-if [ $CPU_NAME = "CPU" ]; then
-  # CPU can show up at different locations
-  CPU_NAME="$(lscpu | grep "Model name:" | sed -r 's/Model name:\s{1,}//g' | awk '{ print $3 }')";
-fi
-
-GPU_NAME="$(nvidia-smi -i 0 --query-gpu=gpu_name --format=csv,noheader)"
-GPU_NAME="${GPU_NAME// /_}"
-
+#CPU_NAME="$(lscpu | grep "Model name:" | sed -r 's/Model name:\s{1,}//g' | awk '{ print $4 }')";
+#if [ $CPU_NAME = "CPU" ]; then
+#  # CPU can show up at different locations
+#  CPU_NAME="$(lscpu | grep "Model name:" | sed -r 's/Model name:\s{1,}//g' | awk '{ print $3 }')";
+#fi
+#
+#GPU_NAME="$(nvidia-smi -i 0 --query-gpu=gpu_name --format=csv,noheader)"
+#GPU_NAME="${GPU_NAME// /_}"
+CPU_NAME="i7-8550U"
+GPU_NAME="GeForce_RTX_2080_Ti"
 CONFIG_NAME="${CPU_NAME}-${GPU_NAME}"
 echo $CONFIG_NAME
 
@@ -117,7 +118,8 @@ run_benchmark() {
   
   # echo $output
   echo ${args[@]}
-  python3 tf_cnn_benchmarks.py "${args[@]}" |& tee "$output"
+  # python3 tf_cnn_benchmarks.py "${args[@]}" |& tee "$output"
+  python tf_cnn_benchmarks.py "${args[@]}" |& tee "$output"
   popd &> /dev/null
 }
 
